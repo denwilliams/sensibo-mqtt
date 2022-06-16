@@ -1,10 +1,28 @@
 # sesnsibo-mqtt
 
-Publish status/state of Sensibo devices, and allow setting state over MQTT
+Publish status/state of Sensibo devices, and allow setting state over MQTT.
 
-Copy `config.example.yml` to `config.yml`, edit the fields, start using `CONFIG_PATH=./config.yml node main`
+## Installation and Configuration
 
-Once started you will receive status updates on `sensibo/status/{device_id}`
+It is intended to be installed globally, ie `npm i -g sensibo-mqtt`
+
+Create a YAML file somewhere. See `config.example.yml`
+
+Run (replace path)
+
+```
+CONFIG_PATH=/path/to/my/config.yml sensibo-mqtt
+```
+
+You can also use Consul for config. See [mqtt-usvc](https://www.npmjs.com/package/mqtt-usvc) for more details.
+
+You need to provide and `apiKey` in the config. The `pollInterval` is optional (default 60000 [60s]).
+
+## Status Updates
+
+Once started you will receive status updates on `sensibo/status/{device_id}` at the configured `pollInterval`. The event will be emitted regardless of whether anything has changed.
+
+## Controlling
 
 You can change AC state sending to `sensibo/set/{device_id}/acState` [see post details](https://sensibo.github.io/#/paths/~1pods~1{device_id}~1acStates/post), or just single properties using `sensibo/set/{device_id}/acState/{property}` [see patch details](https://sensibo.github.io/#/paths/~1pods~1{device_id}~1acStates~1{property}/patch) or enable climate react using `sensibo/set/{device_id}/smartmode`
 [see put details](https://sensibo.github.io/#/paths/~1pods~1{device_id}~1smartmode/put) _NOTE: seems this endpoint doesn't work on the Sensibo API._

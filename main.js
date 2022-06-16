@@ -11,7 +11,7 @@ async function main() {
     console.error("No API Key");
     process.exit(1);
   }
-  if (apiKey === "changeme") {
+  if (apiKey === "changeme" || !apiKey) {
     console.error("Check API configuration");
     process.exit(1);
   }
@@ -37,7 +37,7 @@ async function main() {
         `https://home.sensibo.com/api/v2/pods/${deviceId}/smartmode?apiKey=${apiKey}`,
         { json: true, method: "put", body: { enabled: data } }
       );
-    }
+    },
   };
 
   service.on("message", async (topic, data) => {
@@ -65,13 +65,13 @@ async function main() {
           apiKey
       );
 
-      JSON.parse(response.body).result.map(device => {
+      JSON.parse(response.body).result.map((device) => {
         const {
           id,
           acState,
           connectionStatus,
           smartMode,
-          measurements = {}
+          measurements = {},
         } = device;
         const flattened = {
           id,
@@ -79,7 +79,7 @@ async function main() {
           ...connectionStatus,
           smartModeEnabled: (smartMode && smartMode.enabled) || false,
           temperature: measurements.temperature,
-          humidity: measurements.humidity
+          humidity: measurements.humidity,
         };
 
         service.send("~/status/" + id, flattened);
@@ -94,7 +94,7 @@ async function main() {
   service.subscribe("~/set/#");
 }
 
-main().catch(err => {
-  console.err(err.stack);
+main().catch((err) => {
+  console.error(err.stack);
   process.exit(1);
 });
