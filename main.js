@@ -26,11 +26,16 @@ async function main() {
       if (property) {
         url += "/" + property;
         method = "patch";
-        body = { newValue: data };
-      }
+        body = "{ \"newValue\": " + data + " }";
+        url += "?apiKey=" + apiKey;
+	await got.patch(url, {
+                body
+        });
+	
+      } else {
       url += "?apiKey=" + apiKey;
-
       await got(url, { json: true, body, method });
+      }
     },
     smartmode: async (deviceId, property, data) => {
       await got(
