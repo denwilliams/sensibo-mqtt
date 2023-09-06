@@ -45,3 +45,11 @@ or
 ## HTTP Status
 
 To enable set a http port in the config (see example), then poll /status on that port.
+
+## Docker
+
+To run this as a standalone docker
+```
+docker build -t sensibo-mqtt .
+docker run -d --name sensibo-mqtt -v /wherever/your/config.yml:/app/config.yml sensibo-mqtt 
+```
